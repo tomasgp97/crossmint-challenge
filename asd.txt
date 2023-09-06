@@ -1,0 +1,26 @@
+//not used, used manually
+    async deleteOne(position: Position): Promise<Polyanet> {  
+        const result = await axios.delete(`${API_URL}/polyanets`, requestConfig);
+
+        return result.data;
+    }
+
+    //batches not used due to too much requests error
+    async batchCreate(resources: Polyanet[]): Promise<Polyanet[]> {
+        const toRequest: Promise<AxiosResponse<any,any>>[]  = [];
+        for (const resource of resources) {
+            const promise: Promise<AxiosResponse<any,any>> = axios.post(`${API_URL}/polyanets`, {row: resource.position.row, column: resource.position.column, candidateId: CANDIDATE_ID}, requestConfig);
+            toRequest.push(promise)
+        }
+
+        const responses = await Promise.all(toRequest)
+        return responses.map(response => response.data);
+    }
+
+    async batchDelete(positions: Position[]): Promise<Polyanet> {
+        // const toDelete: Promise<AxiosResponse<any,any>>[] = [];
+        // for (const position of positions) {
+        //     const promise: Promise<AxiosResponse<any,any>> = axios.delete(`${API_URL}/polyanets`, requestConfig);
+        // }
+        throw new Error("Not implemented yet")
+    }
